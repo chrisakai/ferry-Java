@@ -1,0 +1,57 @@
+{
+  "groups": [
+    {
+      "name": "lower",
+      "type": "com.wlz.entity.FTPLower",
+      "sourceType": "com.wlz.entity.FTPLower"
+    },
+    {
+      "name": "upper",
+      "type": "com.wlz.entity.FTPUpper",
+      "sourceType": "com.wlz.entity.FTPUpper"
+    }
+  ],
+  "properties": [
+    {
+      "name": "lower.host",
+      "type": "java.lang.String",
+      "sourceType": "com.wlz.entity.FTPLower"
+    },
+    {
+      "name": "lower.password",
+      "type": "java.lang.String",
+      "sourceType": "com.wlz.entity.FTPLower"
+    },
+    {
+      "name": "lower.port",
+      "type": "java.lang.Integer",
+      "sourceType": "com.wlz.entity.FTPLower"
+    },
+    {
+      "name": "lower.username",
+      "type": "java.lang.String",
+      "sourceType": "com.wlz.entity.FTPLower"
+    },
+    {
+      "name": "upper.host",
+      "type": "java.lang.String",
+      "sourceType": "com.wlz.entity.FTPUpper"
+    },
+    {
+      "name": "upper.password",
+      "type": "java.lang.String",
+      "sourceType": "com.wlz.entity.FTPUpper"
+    },
+    {
+      "name": "upper.port",
+      "type": "java.lang.Integer",
+      "sourceType": "com.wlz.entity.FTPUpper"
+    },
+    {
+      "name": "upper.username",
+      "type": "java.lang.String",
+      "sourceType": "com.wlz.entity.FTPUpper"
+    }
+  ],
+  "hints": []
+}

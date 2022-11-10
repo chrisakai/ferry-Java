@@ -1,0 +1,42 @@
+#FTP前置/后置机
+upper:
+  host: 192.168.3.184
+  port: 21
+  username: WUHU
+  password: 123456
+
+#后台服务部署机
+lower:
+  host: 192.168.3.184
+  port: 21
+  username: WUHU
+  password: 123456
+
+#上层FTP服务器路径
+ftpUpperFolder: \\FTPUpper\\
+#部署本地上传暂存路径
+localUploadFolder: E:\chcFTPTest\FTPStart\
+#部署本地拉取暂存路径
+localDownloadFolder: E:\chcFTPTest\FTPStart\
+#下层FTP服务器路径
+ftpLowerFolder: \\FTPLower\\
+
+server:
+  port: 8090
+
+#边缘文件服务器
+minio:
+  endpoint: http://192.168.3.184:9000
+  accesskey: minioadmin
+  secretkey: minioadmin
+  #  endpoint: http://172.80.21.60:9000
+  #  accesskey: wlzwuhu
+  #  secretkey: 123456789a
+  #检验记录图片
+  recordBucket: wuhu-record
+  #工艺附件图片
+  attachBucket: wuhu-attach
+  #图像识别结果
+  aiBucket: delection-result
+  #待识别文件存储路径
+  aiDetect: ai-detect
