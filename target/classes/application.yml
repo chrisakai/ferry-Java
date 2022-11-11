@@ -12,13 +12,21 @@ lower:
   username: WUHU
   password: 123456
 
-#上层FTP服务器路径
+#图纸固定ftp服务器
+fixedftp:
+  host: 192.168.3.184
+  port: 21
+  username: WUHU
+  password: 123456
+  fixedPath: \\AR\\Dxfs\\
+
+#涉密网FTP服务器路径
 ftpUpperFolder: \\FTPUpper\\
 #部署本地上传暂存路径
 localUploadFolder: E:\chcFTPTest\FTPStart\
 #部署本地拉取暂存路径
-localDownloadFolder: E:\chcFTPTest\FTPStart\
-#下层FTP服务器路径
+localDownloadFolder: E:\chcFTPTest\FTPDestination\
+#工控网FTP服务器路径
 ftpLowerFolder: \\FTPLower\\
 
 server:

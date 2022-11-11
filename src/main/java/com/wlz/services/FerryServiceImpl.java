@@ -2,8 +2,10 @@ package com.wlz.services;
 
 import com.wlz.entity.FTPLower;
 import com.wlz.entity.FTPUpper;
+import com.wlz.entity.FixedFTP;
 import com.wlz.utils.FTPUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -18,8 +20,14 @@ public class FerryServiceImpl implements com.wlz.Interface.FerryService {
     @Resource
     private FTPLower ftpLower;
 
+    @Resource
+    private FixedFTP fixedFTP;
+
     @Autowired
     private FTPUtils ftpUtils;
+
+    @Value("${localUploadFolder}")
+    String localUploadFolder;
 
     @Override
     public String upload(String toFtpFile, String fromFile) {
@@ -45,8 +53,30 @@ public class FerryServiceImpl implements com.wlz.Interface.FerryService {
     }
 
     @Override
+    public String uploadFixed(String toFtpFile, String fromFile) {
+        try {
+            ftpUtils.connect(fixedFTP.getHost(), fixedFTP.getPort(), fixedFTP.getUsername(), fixedFTP.getPassword());
+        } catch (IOException e) {
+            e.printStackTrace();
+            return "ftp connect failed";
+        }
+        try {
+            ftpUtils.upload(toFtpFile,fromFile);   //上传文件字符串
+        } catch (Throwable e) {
+            e.printStackTrace();
+            return "upload failed";
+        }
+        try {
+            ftpUtils.disconnect();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return "ftp disconnect failed";
+        }
+        return "upload success";
+    }
+
+    @Override
     public String upload(String toFtpFile, String[] fromFiles) {
-        FTPUtils ftpUtils = new FTPUtils();
         try {
             ftpUtils.connect(ftpUpper.getHost(), ftpUpper.getPort(), ftpUpper.getUsername(), ftpUpper.getPassword());
         } catch (IOException e) {
@@ -74,7 +104,6 @@ public class FerryServiceImpl implements com.wlz.Interface.FerryService {
 
     @Override
     public String download(String toFile, String FromFtpFile) {
-        FTPUtils ftpUtils = new FTPUtils();
         try {
             ftpUtils.connect(ftpUpper.getHost(), ftpUpper.getPort(), ftpUpper.getUsername(), ftpUpper.getPassword());
         } catch (IOException e) {
@@ -85,7 +114,7 @@ public class FerryServiceImpl implements com.wlz.Interface.FerryService {
             ftpUtils.download(toFile,FromFtpFile);   //上传文件字符串
         } catch (Throwable e) {
             e.printStackTrace();
-            return "upload failed";
+            return "download failed";
         }
         try {
             ftpUtils.disconnect();
@@ -93,12 +122,34 @@ public class FerryServiceImpl implements com.wlz.Interface.FerryService {
             e.printStackTrace();
             return "ftp disconnect failed";
         }
-        return "upload success";
+        return "download success";
+    }
+
+    @Override
+    public String download(String ip, int port, String userName, String passWord, String fileName) {
+        try {
+            ftpUtils.connect(ip, port, userName, passWord);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return "ftp connect failed";
+        }
+        try {
+            ftpUtils.download(localUploadFolder,fileName);   //上传文件字符串
+        } catch (Throwable e) {
+            e.printStackTrace();
+            return "download failed";
+        }
+        try {
+            ftpUtils.disconnect();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return "ftp disconnect failed";
+        }
+        return localUploadFolder.concat(fileName);
     }
 
     @Override
     public String download(String toFile, String[] FromFtpFiles) {
-        FTPUtils ftpUtils = new FTPUtils();
         try {
             ftpUtils.connect(ftpUpper.getHost(), ftpUpper.getPort(), ftpUpper.getUsername(), ftpUpper.getPassword());
         } catch (IOException e) {

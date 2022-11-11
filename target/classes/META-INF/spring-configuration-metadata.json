@@ -1,6 +1,11 @@
 {
   "groups": [
     {
+      "name": "fixedftp",
+      "type": "com.wlz.entity.FixedFTP",
+      "sourceType": "com.wlz.entity.FixedFTP"
+    },
+    {
       "name": "lower",
       "type": "com.wlz.entity.FTPLower",
       "sourceType": "com.wlz.entity.FTPLower"
@@ -12,6 +17,31 @@
     }
   ],
   "properties": [
+    {
+      "name": "fixedftp.fixed-path",
+      "type": "java.lang.String",
+      "sourceType": "com.wlz.entity.FixedFTP"
+    },
+    {
+      "name": "fixedftp.host",
+      "type": "java.lang.String",
+      "sourceType": "com.wlz.entity.FixedFTP"
+    },
+    {
+      "name": "fixedftp.password",
+      "type": "java.lang.String",
+      "sourceType": "com.wlz.entity.FixedFTP"
+    },
+    {
+      "name": "fixedftp.port",
+      "type": "java.lang.Integer",
+      "sourceType": "com.wlz.entity.FixedFTP"
+    },
+    {
+      "name": "fixedftp.username",
+      "type": "java.lang.String",
+      "sourceType": "com.wlz.entity.FixedFTP"
+    },
     {
       "name": "lower.host",
       "type": "java.lang.String",

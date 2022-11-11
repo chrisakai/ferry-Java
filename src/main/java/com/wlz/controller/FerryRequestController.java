@@ -30,13 +30,13 @@ public class FerryRequestController {
     @Value("${ftpLowerFolder}")
     String ftpLowerFolder;
 
-
     @Value("${lower.host}")
     String lowerhost;
-
+    @Value("${fixedftp.fixedPath}")
+    String fixedPath;
 
     //向上层FTP服务器传送,下发动作
-    @RequestMapping(value = "/toUpper", method = RequestMethod.POST)
+    @RequestMapping(value = "/toUpperBackup", method = RequestMethod.POST)
     public String upload2Upper(@RequestBody Map map) {
         Map minioMap = null;
 
@@ -54,6 +54,34 @@ public class FerryRequestController {
         if (uploadResult == "upload success") {
             //删除应用服务器上的暂存图纸文件
             File file = new File(localUploadFolder + "/" + fileName);
+            file.delete();
+        }
+
+        return "success";
+    }
+
+    //向指定FTP服务器传送,下发动作
+    @RequestMapping(value = "/toUpper", method = RequestMethod.POST)
+    public String upload2UpperFixedPath(@RequestBody Map map) {
+        Map minioMap = null;
+
+        String picPath = ((String) map.get("fileName"));
+        String ip = ((String) map.get("ip"));
+        int port = (int) map.get("port");
+        String userName = ((String) map.get("userName"));
+        String passWord = ((String) map.get("passWord"));
+        System.out.println("图片地址为:" + picPath);
+        System.out.println("ip: " + ip);
+        System.out.println("port: " + port);
+        System.out.println("userName: " + userName);
+        System.out.println("passWord: " + passWord);
+
+        String localBufferPath = fs.download(ip,port,userName,passWord,picPath);
+        System.out.println("localBufferPath: " + localBufferPath);
+        String uploadResult = fs.uploadFixed(fixedPath,localBufferPath);
+        if (uploadResult == "upload success") {
+            //删除应用服务器上的暂存图纸文件
+            File file = new File(localBufferPath);
             file.delete();
         }
 
