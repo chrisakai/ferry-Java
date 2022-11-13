@@ -125,6 +125,15 @@ public class FerryServiceImpl implements com.wlz.Interface.FerryService {
         return "download success";
     }
 
+    /**
+     *下载图纸后台指定ip地址下的FTP服务器中的指定文件至本地缓存文件夹
+     * @param ip
+     * @param port
+     * @param userName
+     * @param passWord
+     * @param fileName
+     * @return
+     */
     @Override
     public String download(String ip, int port, String userName, String passWord, String fileName) {
         try {
@@ -134,7 +143,8 @@ public class FerryServiceImpl implements com.wlz.Interface.FerryService {
             return "ftp connect failed";
         }
         try {
-            ftpUtils.download(localUploadFolder,fileName);   //上传文件字符串
+            //下载FTP相对路径下的文件fileName至本地缓存文件夹
+            ftpUtils.download(localUploadFolder,fileName);
         } catch (Throwable e) {
             e.printStackTrace();
             return "download failed";
@@ -145,7 +155,12 @@ public class FerryServiceImpl implements com.wlz.Interface.FerryService {
             e.printStackTrace();
             return "ftp disconnect failed";
         }
-        return localUploadFolder.concat(fileName);
+        int dex = fileName.lastIndexOf("/");
+        System.out.println("本地文件路径为：" + fileName);
+        System.out.println("本地文件路径最后符号\\位置为：" + dex);
+        String filename = fileName.substring(dex+1);
+        System.out.println("本地文件名为：" + filename);
+        return localUploadFolder.concat(filename);
     }
 
     @Override

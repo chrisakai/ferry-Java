@@ -76,6 +76,7 @@ public class FerryRequestController {
         System.out.println("userName: " + userName);
         System.out.println("passWord: " + passWord);
 
+        //下载图纸后台指定ip地址下的FTP服务器中的指定文件至本地缓存文件夹
         String localBufferPath = fs.download(ip,port,userName,passWord,picPath);
         System.out.println("localBufferPath: " + localBufferPath);
         String uploadResult = fs.uploadFixed(fixedPath,localBufferPath);
