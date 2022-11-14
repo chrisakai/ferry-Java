@@ -83,18 +83,18 @@ public class FerryRequestController {
         System.out.println("passWord: " + passWord);
         System.out.println("是否sync: " + sync);
 
+        //下载图纸后台指定ip地址下的FTP服务器中的指定文件至本地缓存文件夹
+        String localBufferPath = fs.download(ip,port,userName,passWord,picPath);
+        System.out.println("localBufferPath: " + localBufferPath);
+        //上传至图纸服务器
+        String uploadResult = fs.uploadFixed(fixedPath,localBufferPath);
+        if (uploadResult == "upload success") {
+            //删除应用服务器上的暂存图纸文件
+            File file = new File(localBufferPath);
+            file.delete();
+        }
         //判断是否需要同步图片
         if(sync){
-            //下载图纸后台指定ip地址下的FTP服务器中的指定文件至本地缓存文件夹
-            String localBufferPath = fs.download(ip,port,userName,passWord,picPath);
-            System.out.println("localBufferPath: " + localBufferPath);
-            //上传至图纸服务器
-            String uploadResult = fs.uploadFixed(fixedPath,localBufferPath);
-            if (uploadResult == "upload success") {
-                //删除应用服务器上的暂存图纸文件
-                File file = new File(localBufferPath);
-                file.delete();
-            }
             //上传至审计服务器
             String uploadAuditResult = fs.uploadFixed(fixedPath,localBufferPath);
             if (uploadAuditResult == "upload success") {
