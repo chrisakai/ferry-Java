@@ -1,20 +1,28 @@
 #FTP前置/后置机
 upper:
-  host: 192.168.3.184
+  host: 192.168.3.35
   port: 21
   username: WUHU
   password: 123456
 
 #后台服务部署机
 lower:
-  host: 192.168.3.184
+  host: 192.168.3.35
   port: 21
   username: WUHU
   password: 123456
 
 #图纸固定ftp服务器
 fixedftp:
-  host: 192.168.3.184
+  host: 192.168.3.35
+  port: 21
+  username: WUHU
+  password: 123456
+  fixedPath: \\AR\\Dxfs\\
+
+#审计固定ftp服务器
+fixedauditftp:
+  host: 192.168.3.35
   port: 21
   username: WUHU
   password: 123456

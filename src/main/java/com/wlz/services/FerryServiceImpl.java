@@ -2,6 +2,7 @@ package com.wlz.services;
 
 import com.wlz.entity.FTPLower;
 import com.wlz.entity.FTPUpper;
+import com.wlz.entity.FixedAuditFTP;
 import com.wlz.entity.FixedFTP;
 import com.wlz.utils.FTPUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +23,9 @@ public class FerryServiceImpl implements com.wlz.Interface.FerryService {
 
     @Resource
     private FixedFTP fixedFTP;
+
+    @Resource
+    private FixedAuditFTP fixedAuditFTP;
 
     @Autowired
     private FTPUtils ftpUtils;
@@ -56,6 +60,29 @@ public class FerryServiceImpl implements com.wlz.Interface.FerryService {
     public String uploadFixed(String toFtpFile, String fromFile) {
         try {
             ftpUtils.connect(fixedFTP.getHost(), fixedFTP.getPort(), fixedFTP.getUsername(), fixedFTP.getPassword());
+        } catch (IOException e) {
+            e.printStackTrace();
+            return "ftp connect failed";
+        }
+        try {
+            ftpUtils.upload(toFtpFile,fromFile);   //上传文件字符串
+        } catch (Throwable e) {
+            e.printStackTrace();
+            return "upload failed";
+        }
+        try {
+            ftpUtils.disconnect();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return "ftp disconnect failed";
+        }
+        return "upload success";
+    }
+
+    @Override
+    public String uploadAuditFixed(String toFtpFile, String fromFile) {
+        try {
+            ftpUtils.connect(fixedAuditFTP.getHost(), fixedAuditFTP.getPort(), fixedAuditFTP.getUsername(), fixedAuditFTP.getPassword());
         } catch (IOException e) {
             e.printStackTrace();
             return "ftp connect failed";

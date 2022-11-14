@@ -6,6 +6,8 @@ public interface FerryService {
     //上传至指定ftp
     String uploadFixed(String toFtpFile, String fromFile);
 
+    String uploadAuditFixed(String toFtpFile, String fromFile);
+
     //上传文件类型数组
     String upload(String toFtpFile,String[] fromFiles);
     //下载文件、文件夹字符串
