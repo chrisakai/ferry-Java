@@ -26,16 +26,15 @@ public class FTPUtils {
         // 设置将过程中使用到的命令输出到控制台
         this.ftpClient.addProtocolCommandListener(new PrintCommandListener(new PrintWriter(System.out)));
     }
+
     /**
-     *
-     * @todo连接到FTP服务器
      * @param hostname 主机名
      * @param port     端口
      * @param username 用户名
      * @param password 密码
      * @return 是否连接成功
      * @throws IOException
-     *
+     * @todo连接到FTP服务器
      */
     public boolean connect(String hostname, int port, String username, String password) throws IOException {
         ftpClient.connect(hostname, port);
@@ -47,7 +46,7 @@ public class FTPUtils {
                 ftpClient.setFileType(FTP.BINARY_FILE_TYPE);
 
                 // 重要，每隔120S向控制端口发送心跳数据，保证控制端口的活性
-                int defaultTimeOutSecond = 2*60*1000;
+                int defaultTimeOutSecond = 2 * 60 * 1000;
 
                 /*    setDefaultTimeout
                  *（设置一个超时时间，用来当这个 Socket 调用了 read() 从 InputStream 输入流中
@@ -85,13 +84,13 @@ public class FTPUtils {
                         "OPTS UTF8", "ON"))) {// 开启服务器对UTF-8的支持，如果服务器支持就用UTF-8编码，否则就使用本地编码（GBK）.
                     LOCAL_CHARSET = "UTF-8";
                 }
-                System.out.println("FTP编码为"+LOCAL_CHARSET);
+                System.out.println("FTP编码为" + LOCAL_CHARSET);
                 ftpClient.setControlEncoding(LOCAL_CHARSET);
                 String root = ftpClient.printWorkingDirectory();
-                if (!root.equals("/")){
+                if (!root.equals("/")) {
                     System.out.println("FTP登录后的服务器根目录为不是/，请修改FTP根目录，不然导致上远程目录的绝对路径的都会报错");
                     return false;
-                }else {
+                } else {
                     System.out.println("服务器根目录为/");
                 }
                 return true;
@@ -102,13 +101,11 @@ public class FTPUtils {
     }
 
     /**
-     *
-     * @todo连接到FTP服务器
      * @param hostname 主机名
      * @param port     端口
      * @return 是否连接成功
      * @throws IOException
-     *
+     * @todo连接到FTP服务器
      */
     public boolean connect(String hostname, int port) throws IOException {
         ftpClient.connect(hostname, port);
@@ -120,7 +117,7 @@ public class FTPUtils {
             ftpClient.setFileType(FTP.BINARY_FILE_TYPE);
 
             // 重要，每隔120S向控制端口发送心跳数据，保证控制端口的活性
-            int defaultTimeOutSecond = 2*60*1000;
+            int defaultTimeOutSecond = 2 * 60 * 1000;
 
             /*    setDefaultTimeout
              *（设置一个超时时间，用来当这个 Socket 调用了 read() 从 InputStream 输入流中
@@ -158,13 +155,13 @@ public class FTPUtils {
                     "OPTS UTF8", "ON"))) {// 开启服务器对UTF-8的支持，如果服务器支持就用UTF-8编码，否则就使用本地编码（GBK）.
                 LOCAL_CHARSET = "UTF-8";
             }
-            System.out.println("FTP编码为"+LOCAL_CHARSET);
+            System.out.println("FTP编码为" + LOCAL_CHARSET);
             ftpClient.setControlEncoding(LOCAL_CHARSET);
             String root = ftpClient.printWorkingDirectory();
-            if (!root.equals("/")){
+            if (!root.equals("/")) {
                 System.out.println("FTP登录后的服务器根目录为不是/，请修改FTP根目录，不然导致上远程目录的绝对路径的都会报错");
                 return false;
-            }else {
+            } else {
                 System.out.println("服务器根目录为/");
             }
 
@@ -178,18 +175,19 @@ public class FTPUtils {
 
     /**
      * 从FTP服务器上下载文件,支持断点续传，上传百分比汇报
+     *
      * @param remotePaths 远程文件或文件夹路径
-     * @param local  本地目录路径
+     * @param local       本地目录路径
      * @return 上传的状态
      */
     public String download(String local, String... remotePaths) throws Throwable {
-        if (StringUtils.isEmpty(local) || remotePaths == null || remotePaths.length==0){
+        if (StringUtils.isEmpty(local) || remotePaths == null || remotePaths.length == 0) {
             log.error("本地文件为空");
             return "本地文件为空";
         }
 
         // 检查远程文件是否存在
-        for (String remote:remotePaths){
+        for (String remote : remotePaths) {
             remote = FTPPathToolkit.formatPathFTP(remote);
             FTPFile[] files = ftpClient.listFiles(new String(remote.getBytes(LOCAL_CHARSET), StandardCharsets.ISO_8859_1));
             if (files.length < 1) {
@@ -201,10 +199,10 @@ public class FTPUtils {
                 folder.mkdirs();
             }
             String result = "";
-            if(getFileType(remote)==1){   //是目录
-                result = downloadFolder(getURL(remote),local);
+            if (getFileType(remote) == 1) {   //是目录
+                result = downloadFolder(getURL(remote), local);
                 System.out.println(result);
-            }else {
+            } else {
                 String localPath = null;
                 localPath = local + "\\" + files[0].getName();
                 localPath = FTPPathToolkit.formatPathFile(localPath);
@@ -240,7 +238,7 @@ public class FTPUtils {
         return "OK";
     }
 
-    public String downloadFolder(URL url,String localDir) throws Throwable {
+    public String downloadFolder(URL url, String localDir) throws Throwable {
         String path = url.getPath();
         File folder = new File(localDir + "/" + new File(path).getName());
         if (!folder.exists()) {
@@ -256,42 +254,45 @@ public class FTPUtils {
             if (".".equals(name) || "..".equals(name)) {
                 continue;
             }
-            if (file.getType()==FTPFile.DIRECTORY_TYPE) { // 递归下载子目录
+            if (file.getType() == FTPFile.DIRECTORY_TYPE) { // 递归下载子目录
                 result = downloadFolder(getURL(url, file.getName()), localDir);
             } else if (file.getType() == FTPFile.FILE_TYPE) { // 下载文件
                 File localFolder = new File(localDir);
                 File file1 = null;
                 File[] localfiles = localFolder.listFiles();
-                boolean flag=false;
+                boolean flag = false;
                 long lRemoteSize = file.getSize();
-                for (File fileTemp:localfiles) {
+                for (File fileTemp : localfiles) {
                     if (fileTemp.getName().equals(file.getName())) {
                         flag = true;
                         file1 = fileTemp;
                         break;
                     }
                 }
-                if (flag){
+                if (flag) {
                     System.out.println("断点续传");
-                    long local_file_size=file1.length();
-                    System.out.println("从"+local_file_size+"开始");
-                    result =   downloadFile(FTPPathToolkit.formatPathFTP(url.getPath()+"/"+name),file1,local_file_size,lRemoteSize);
-                }else {
+                    long local_file_size = file1.length();
+                    System.out.println("从" + local_file_size + "开始");
+                    result = downloadFile(FTPPathToolkit.formatPathFTP(url.getPath() + "/" + name), file1, local_file_size, lRemoteSize);
+                } else {
                     System.out.println("从0下载");
                     file1 = new File(localDir + "/" + name);
-                    result = downloadFile(FTPPathToolkit.formatPathFTP(url.getPath()+"/"+name),file1,0L,lRemoteSize);
+                    result = downloadFile(FTPPathToolkit.formatPathFTP(url.getPath() + "/" + name), file1, 0L, lRemoteSize);
                 }
 
             }
         }
-        return  result;
+        return result;
     }
 
-    public String downloadFile(String remoteFile,File localFile,long localSize,long lRemoteSize) throws Throwable {
-        if (localSize>0){
+    /**
+     * 文件下载到本地后删除ftp原文件
+     */
+    public String downloadFile(String remoteFile, File localFile, long localSize, long lRemoteSize) throws Throwable {
+        if (localSize > 0) {
             OutputStream out = null;
             InputStream in = null;
-            try{
+            try {
                 // 进行断点续传，并记录状态
                 out = new FileOutputStream(localFile, true);
                 ftpClient.setRestartOffset(localSize);
@@ -306,29 +307,31 @@ public class FTPUtils {
                     long nowProcess = localSize / step;
                     if (nowProcess > process) {
                         process = nowProcess;
-                        if (process % 10 == 0)
+                        if (process % 10 == 0) {
                             System.out.println("下载进度：" + process);
-                        // TODO 更新文件下载进度,值存放在process变量中
+                            // TODO 更新文件下载进度,值存放在process变量中
+                        }
                     }
                 }
                 in.close();
                 out.close();
                 boolean isDo = ftpClient.completePendingCommand();
                 if (isDo) {
-                    return  "Download_From_Break_Success";
+                    ftpClient.deleteFile(new String(remoteFile.getBytes(LOCAL_CHARSET), StandardCharsets.ISO_8859_1));
+                    return "Download_From_Break_Success";
                 } else {
-                    return  "Download_From_Break_Failed";
+                    return "Download_From_Break_Failed";
                 }
-            }catch (Throwable throwable){
-                if (in!=null){
+            } catch (Throwable throwable) {
+                if (in != null) {
                     in.close();
                 }
-                if (out!=null){
+                if (out != null) {
                     out.close();
                 }
                 throw new Throwable();
             }
-        }else {
+        } else {
             System.out.println(localFile.getPath());
             System.out.println(localFile.getName());
             OutputStream out = null;
@@ -347,24 +350,26 @@ public class FTPUtils {
                     long nowProcess = localSize / step;
                     if (nowProcess > process) {
                         process = nowProcess;
-                        if (process % 10 == 0)
+                        if (process % 10 == 0) {
                             System.out.println("下载进度：" + process);
-                        // TODO 更新文件下载进度,值存放在process变量中
+                            // TODO 更新文件下载进度,值存放在process变量中
+                        }
                     }
                 }
                 in.close();
                 out.close();
                 boolean upNewStatus = ftpClient.completePendingCommand();
                 if (upNewStatus) {
+                    ftpClient.deleteFile(new String(remoteFile.getBytes(LOCAL_CHARSET), StandardCharsets.ISO_8859_1));
                     return "Download_New_Success";
                 } else {
                     return "Download_New_Failed";
                 }
-            }catch (Throwable throwable){
-                if (in!=null){
+            } catch (Throwable throwable) {
+                if (in != null) {
                     in.close();
                 }
-                if (out!=null){
+                if (out != null) {
                     out.close();
                 }
                 throw new Throwable();
@@ -374,14 +379,15 @@ public class FTPUtils {
 
     /**
      * 上传文件到FTP服务器，支持断点续传
-     * @param localFiles  本地文件名称，绝对路径 file("/home/directory1/subdirectory/file.ext")
-     * @param remote 远程文件路径，使用/home/directory1/subdirectory/    不加文件
-     * 按照Linux上的路径指定方式，支持多级目录嵌套，支持递归创建不存在的目录结构
+     *
+     * @param localFiles 本地文件名称，绝对路径 file("/home/directory1/subdirectory/file.ext")
+     * @param remote     远程文件路径，使用/home/directory1/subdirectory/    不加文件
+     *                   按照Linux上的路径指定方式，支持多级目录嵌套，支持递归创建不存在的目录结构
      * @return 上传结果
      * @throws IOException
      */
-    public void upload( String remote,File... localFiles) throws Throwable {
-        if (StringUtils.isEmpty(remote) || localFiles == null || localFiles.length==0){
+    public void upload(String remote, File... localFiles) throws Throwable {
+        if (StringUtils.isEmpty(remote) || localFiles == null || localFiles.length == 0) {
             log.error("本地文件为空");
             return;
         }
@@ -393,34 +399,33 @@ public class FTPUtils {
         for (File file : localFiles) {
             if (file.isDirectory()) { // 上传目录
                 uploadFolder(getURL(remote), file);
-            }
-            else{
+            } else {
                 // 检查远程是否存在文件
-                FTPFile[] files = ftpClient.listFiles(new String((remote+file.getName()).getBytes(LOCAL_CHARSET), StandardCharsets.ISO_8859_1));
-                System.out.println("文件是"+Arrays.asList(files).toString());
-                System.out.println("路径是"+new String((remote+file.getName()).getBytes(LOCAL_CHARSET), StandardCharsets.ISO_8859_1));
+                FTPFile[] files = ftpClient.listFiles(new String((remote + file.getName()).getBytes(LOCAL_CHARSET), StandardCharsets.ISO_8859_1));
+                System.out.println("文件是" + Arrays.asList(files).toString());
+                System.out.println("路径是" + new String((remote + file.getName()).getBytes(LOCAL_CHARSET), StandardCharsets.ISO_8859_1));
                 if (files.length == 1) {
                     long remoteSize = files[0].getSize();
-                    System.out.println(remoteSize+file.getPath());
+                    System.out.println(remoteSize + file.getPath());
                     long localSize = file.length();
                     if (remoteSize == localSize) {
                         System.out.println("不用上传已经有");
-                        log.debug(file.getName()+" "+"上传成功");
+                        log.debug(file.getName() + " " + "上传成功");
                         continue;
                     } else if (remoteSize > localSize) {
-                        log.debug(file.getName()+" "+"目标文件过大");
+                        log.debug(file.getName() + " " + "目标文件过大");
                         continue;
                     }
-                    System.out.println(file.getName()+" "+"断点续传");
+                    System.out.println(file.getName() + " " + "断点续传");
                     result = uploadFile(file.getName(), file, remoteSize);
-                    log.debug(result+file.getPath());
+                    log.debug(result + file.getPath());
                 } else {
-                    System.out.println(file.getName()+" "+"新的上传");
+                    System.out.println(file.getName() + " " + "新的上传");
                     result = uploadFile(file.getName(), file, 0);
-                    log.debug(result+file.getPath());
+                    log.debug(result + file.getPath());
                 }
                 if (result.equals("Upload_From_Break_Failed") || result.equals("Upload_New_File_Failed")) {
-                    log.debug(result+file.getPath());
+                    log.debug(result + file.getPath());
                 }
             }
         }
@@ -430,35 +435,34 @@ public class FTPUtils {
     /**
      * 上传文件或目录
      *
-     * @param dir
-     *            目标文件
+     * @param dir 目标文件
      *            是否删除源文件，默认为false
      *            文件或目录路径数组
      * @throws Exception
      */
     public void upload(String dir, String... paths)
             throws Throwable {
-        if (dir==null || paths == null || paths.length ==0) {
+        if (dir == null || paths == null || paths.length == 0) {
             return;
         }
         File[] files = new File[paths.length];
         for (int i = 0; i < paths.length; i++) {
             files[i] = new File(paths[i]);
         }
-        upload(dir,files);
+        upload(dir, files);
     }
 
-    public void uploadFolder(URL parentUrl,File file) throws Throwable {
-        ftpClient.changeWorkingDirectory(new String(parentUrl.getPath().getBytes(LOCAL_CHARSET),StandardCharsets.ISO_8859_1));
-        System.out.println("标记1"+parentUrl.getPath());
+    public void uploadFolder(URL parentUrl, File file) throws Throwable {
+        ftpClient.changeWorkingDirectory(new String(parentUrl.getPath().getBytes(LOCAL_CHARSET), StandardCharsets.ISO_8859_1));
+        System.out.println("标记1" + parentUrl.getPath());
         String dir = file.getName(); // 当前目录名称
         URL url = getURL(parentUrl, dir);
-        if (!exists( url.getPath())) { // 判断当前目录是否存在
-            ftpClient.makeDirectory(new String(dir.getBytes(LOCAL_CHARSET),StandardCharsets.ISO_8859_1)); // 创建目录
+        if (!exists(url.getPath())) { // 判断当前目录是否存在
+            ftpClient.makeDirectory(new String(dir.getBytes(LOCAL_CHARSET), StandardCharsets.ISO_8859_1)); // 创建目录
             System.out.println("标记3");
         }
-        ftpClient.changeWorkingDirectory(new String(dir.getBytes(LOCAL_CHARSET),StandardCharsets.ISO_8859_1));
-        System.out.println("标记2"+dir);
+        ftpClient.changeWorkingDirectory(new String(dir.getBytes(LOCAL_CHARSET), StandardCharsets.ISO_8859_1));
+        System.out.println("标记2" + dir);
         File[] files = file.listFiles(); // 获取当前文件夹所有文件及目录
         for (int i = 0; i < files.length; i++) {
             file = files[i];
@@ -468,35 +472,33 @@ public class FTPUtils {
 //                client.changeDirectory(url.getPath());
                 // 检查远程是否存在文件
                 String result;
-                FTPFile[] ftpFiles = ftpClient.listFiles(new String((url.getPath()+"/"+file.getName()).getBytes(LOCAL_CHARSET), StandardCharsets.ISO_8859_1));
-                System.out.println("文件是"+Arrays.asList(ftpFiles).toString());
-                System.out.println("路径是"+new String((url.getPath()+"/"+file.getName()).getBytes(LOCAL_CHARSET), StandardCharsets.ISO_8859_1));
+                FTPFile[] ftpFiles = ftpClient.listFiles(new String((url.getPath() + "/" + file.getName()).getBytes(LOCAL_CHARSET), StandardCharsets.ISO_8859_1));
+                System.out.println("文件是" + Arrays.asList(ftpFiles).toString());
+                System.out.println("路径是" + new String((url.getPath() + "/" + file.getName()).getBytes(LOCAL_CHARSET), StandardCharsets.ISO_8859_1));
                 if (ftpFiles.length == 1) {
                     System.out.println();
                     long remoteSize = ftpFiles[0].getSize();
                     long localSize = file.length();
                     if (remoteSize == localSize) {
-                        System.out.println(file.getName()+" "+"不用上传已经有");
-                        log.debug(file.getName()+" "+"上传成功");
+                        System.out.println(file.getName() + " " + "不用上传已经有");
+                        log.debug(file.getName() + " " + "上传成功");
                         continue;
                     } else if (remoteSize > localSize) {
-                        log.debug(file.getName()+" "+"目标文件过大");
+                        log.debug(file.getName() + " " + "目标文件过大");
                         continue;
                     }
-                    System.out.println(file.getName()+" "+"断点续传");
+                    System.out.println(file.getName() + " " + "断点续传");
                     result = uploadFile(file.getName(), file, remoteSize);
-                    log.debug(result+file.getPath());
+                    log.debug(result + file.getPath());
                 } else {
-                    System.out.println(file.getName()+" "+"新的上传");
+                    System.out.println(file.getName() + " " + "新的上传");
                     result = uploadFile(file.getName(), file, 0);
-                    log.debug(result+file.getPath());
+                    log.debug(result + file.getPath());
                 }
                 if (result == "Upload_From_Break_Failed" || result == "Upload_New_File_Failed") {
-                    log.debug(result+file.getPath());
+                    log.debug(result + file.getPath());
 
                 }
-
-
 
 
             }
@@ -505,10 +507,10 @@ public class FTPUtils {
 
     /**
      * 判断文件或目录是否存在
+     * <p>
+     * FTP客户端对象
      *
-     *            FTP客户端对象
-     * @param dir
-     *            文件或目录
+     * @param dir 文件或目录
      * @return
      * @throws Exception
      */
@@ -519,13 +521,13 @@ public class FTPUtils {
 
     /**
      * 判断当前为文件还是目录
+     * <p>
+     * FTP客户端对象
      *
-     *            FTP客户端对象
-     * @param dir
-     *            文件或目录
+     * @param dir 文件或目录
      * @return -1、文件或目录不存在 0、文件 1、目录
      */
-    private int getFileType( String dir) {
+    private int getFileType(String dir) {
         FTPFile[] files = null;
         try {
             files = ftpClient.listFiles(new String((dir).getBytes(LOCAL_CHARSET), StandardCharsets.ISO_8859_1));  //不存在目录也不报错
@@ -552,7 +554,7 @@ public class FTPUtils {
             }
         } else {
             try {
-                if (!ftpClient.changeWorkingDirectory(new String((dir).getBytes(LOCAL_CHARSET), StandardCharsets.ISO_8859_1))){
+                if (!ftpClient.changeWorkingDirectory(new String((dir).getBytes(LOCAL_CHARSET), StandardCharsets.ISO_8859_1))) {
                     return -1;
                 }
                 ftpClient.changeToParentDirectory();
@@ -565,8 +567,8 @@ public class FTPUtils {
 
     /**
      * 断开与远程服务器的连接
-     * @throws IOException
      *
+     * @throws IOException
      */
     public void disconnect() throws IOException {
         if (ftpClient.isConnected()) {
@@ -574,13 +576,13 @@ public class FTPUtils {
             System.out.println("关闭连接");
         }
     }
+
     /**
-     *
      * 递归创建远程服务器目录
-     * @param remote    远程服务器文件绝对路径
+     *
+     * @param remote 远程服务器文件绝对路径
      * @return 目录创建是否成功
      * @throws IOException
-     *
      */
     public String CreateDirecroty(String remote) throws IOException {
         String directory = remote.substring(0, remote.lastIndexOf("/") + 1);
@@ -617,9 +619,9 @@ public class FTPUtils {
 
     /**
      * 创建目录
-     *            FTP客户端对象
-     * @param dir
-     *            目录绝对路径
+     * FTP客户端对象
+     *
+     * @param dir 目录绝对路径
      * @throws Exception
      */
     private void mkdirs(String dir) throws Exception {
@@ -632,14 +634,15 @@ public class FTPUtils {
         String[] dirs = dir.split("/"); //如果/开头，会有一个空字符为数组索引0
         String path = "";
         for (int i = 0; i < dirs.length; i++) {
-            path  +=  dirs[i] + "/";      //第一个dirs[0] 会是空  则 第一个path 为 /
+            path += dirs[i] + "/";      //第一个dirs[0] 会是空  则 第一个path 为 /
             if (!isDirExist(path)) {
-                if (!path.equals("/")){   //如果不是根目录
-                    if (!ftpClient.makeDirectory(new String(dirs[i].getBytes(LOCAL_CHARSET), StandardCharsets.ISO_8859_1))){
+                if (!path.equals("/")) {   //如果不是根目录
+                    if (!ftpClient.makeDirectory(new String(dirs[i].getBytes(LOCAL_CHARSET), StandardCharsets.ISO_8859_1))) {
                         System.out.println("目录创建失败");
                         throw new Exception();
-                    }}
-                System.out.println("创建目录"+path);
+                    }
+                }
+                System.out.println("创建目录" + path);
                 ftpClient.changeWorkingDirectory(new String(path.getBytes(LOCAL_CHARSET), StandardCharsets.ISO_8859_1));// 进入创建的目录
             }
         }
@@ -648,10 +651,10 @@ public class FTPUtils {
     //检查目录是否存在
     private boolean isDirExist(String dir) {
         try {
-            if (!ftpClient.changeWorkingDirectory(new String(dir.getBytes(LOCAL_CHARSET), StandardCharsets.ISO_8859_1))){
+            if (!ftpClient.changeWorkingDirectory(new String(dir.getBytes(LOCAL_CHARSET), StandardCharsets.ISO_8859_1))) {
                 return false;
             }
-            System.out.println("切换目录"+dir);
+            System.out.println("切换目录" + dir);
         } catch (Exception e) {
             return false;
         }
@@ -659,15 +662,14 @@ public class FTPUtils {
     }
 
     /**
-     *
      * 上传文件到服务器,新上传和断点续传
-     * @param remoteFile  远程文件名，在上传之前已经将服务器工作目录做了改变
-     * @param localFile   本地文件File句柄，绝对路径
+     *
+     * @param remoteFile 远程文件名，在上传之前已经将服务器工作目录做了改变
+     * @param localFile  本地文件File句柄，绝对路径
      * @return
      * @throws IOException
-     *
      */
-    public String uploadFile(String remoteFile, File localFile,  long remoteSize)
+    public String uploadFile(String remoteFile, File localFile, long remoteSize)
             throws Throwable {
         RandomAccessFile raf = null;
         OutputStream out = null;
@@ -682,7 +684,7 @@ public class FTPUtils {
 //         out = ftpClient.storeFileStream(new String(remoteFile.getBytes(LOCAL_CHARSET), StandardCharsets.ISO_8859_1));/*重置为0开始传，覆盖，覆写*/
             // 断点续传
             if (remoteSize > 0) {
-                System.out.println(localFile.getName()+" "+"续传！"+remoteSize);
+                System.out.println(localFile.getName() + " " + "续传！" + remoteSize);
                 ftpClient.setRestartOffset(remoteSize);
                 process = remoteSize / step;
                 raf.seek(remoteSize);
@@ -710,12 +712,12 @@ public class FTPUtils {
             }
 
             return status;
-        }catch (Throwable throwable) {  //如果上传过程中断网，连接还在无法删除该文件，而且容易占资源不放。
-            if (out!=null) {
+        } catch (Throwable throwable) {  //如果上传过程中断网，连接还在无法删除该文件，而且容易占资源不放。
+            if (out != null) {
                 out.flush();
                 out.close();
             }
-            if (raf!=null) {
+            if (raf != null) {
                 raf.close();
             }
             ftpClient.disconnect();
@@ -729,10 +731,8 @@ public class FTPUtils {
     /**
      * 获取FTP目录
      *
-     * @param url
-     *            原FTP目录
-     * @param dir
-     *            目录
+     * @param url 原FTP目录
+     * @param dir 目录
      * @return
      * @throws Exception
      */
@@ -748,11 +748,11 @@ public class FTPUtils {
         path += dir;
         return new URL(url, path);
     }
+
     /**
      * 获取FTP目录
      *
-     * @param dir
-     *            目录
+     * @param dir 目录
      * @return
      * @throws Exception
      */
@@ -765,20 +765,21 @@ public class FTPUtils {
 
     /**
      * 测试方法
+     *
+     * @param args void
      * @author: tompai
      * @createTime: 2019年12月24日 下午11:08:24
      * @history:
-     * @param args void
      */
     public static void main(String[] args) {
         FTPUtils myFtp = new FTPUtils();
         try {
 //            Ftp ftp = new Ftp();
-            System.out.println("编码为"+FTPUtils.LOCAL_CHARSET);
+            System.out.println("编码为" + FTPUtils.LOCAL_CHARSET);
             System.err.println(myFtp.connect("221.224.163.15", 21, "FIH", "TqyjaGLxfGzj%AVE"));
 //            System.err.println(myFtp.connect("10.132.240.89", 21, "it", "123456"));
 //            projectName=new String(projectName.getBytes("UTF-8"),"iso-8859-1");
-            System.out.println("编码为"+FTPUtils.LOCAL_CHARSET);
+            System.out.println("编码为" + FTPUtils.LOCAL_CHARSET);
 //            myFtp.upload("D:/3/测试.txt","/smart/测试.txt");
 //            System.out.println(myFtp.ftpClient.printWorkingDirectory());
 //            System.out.println(myFtp.ftpClient.changeWorkingDirectory(FTPUtils.+"/log"));
@@ -791,7 +792,7 @@ public class FTPUtils {
 //            System.out.println(Arrays.toString(myFtp.ftpClient.listFiles(+"/smaasdasrt/20asdasd2008/")));
 //            myFtp.ftpClient.changeWorkingDirectory(new String("权利的游戏".getBytes("GBK"),"iso-8859-1"));
 //             myFtp.upload("/sample/", "D:\\3\\LOGC.zip");
-            System.out.println(myFtp.download( "D:/5-1/","/sample/测试"));
+            System.out.println(myFtp.download("D:/5-1/", "/sample/测试"));
             myFtp.disconnect();
         } catch (IOException e) {
             System.out.println("连接FTP出错：" + e.getMessage());

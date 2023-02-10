@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.io.File;
 import java.io.IOException;
 
 @Service
@@ -32,6 +33,10 @@ public class FerryServiceImpl implements com.wlz.Interface.FerryService {
 
     @Value("${localUploadFolder}")
     String localUploadFolder;
+
+    @Value("${localDownloadFolder}")
+    String localDownloadFolder;
+
 
     @Override
     public String upload(String toFtpFile, String fromFile) {
@@ -171,7 +176,7 @@ public class FerryServiceImpl implements com.wlz.Interface.FerryService {
         }
         try {
             //下载FTP相对路径下的文件fileName至本地缓存文件夹
-            ftpUtils.download(localUploadFolder,fileName);
+            ftpUtils.download(localDownloadFolder,fileName);
         } catch (Throwable e) {
             e.printStackTrace();
             return "download failed";
@@ -216,4 +221,5 @@ public class FerryServiceImpl implements com.wlz.Interface.FerryService {
         }
         return "upload success";
     }
+
 }

@@ -1,59 +1,55 @@
-#FTP前置机
+#FTP上传目录
 upper:
-  host: 192.168.3.35
+#  host: 10.10.3.201
+#  host: 10.20.10.202
+  host: 127.0.0.1
   port: 21
-  username: WUHU
-  password: 123456
+#  username: ar-san
+#  password: ar-san@123
+  username: wuhu
+  password: 5720.wearable
+  #文件传入目录
+  fixedPath: \\
 
-#FTP后置机
+#FTP下载目录
 lower:
-  host: 192.168.3.35
+#  host: 10.20.10.201
+#  host: 10.10.3.202
+#  port: 21
+#  username: ar-san
+#  password: ar-san@123
+  host: 127.0.0.1
   port: 21
-  username: WUHU
-  password: 123456
+  username: test
+  password: 12345678
+  fixedPath: \\
 
 #图纸固定ftp服务器
 fixedftp:
-  host: 192.168.3.35
+  host: 127.0.0.1
   port: 21
-  username: WUHU
-  password: 123456
-  fixedPath: \\AR\\Dxfs\\
+  username: wuhu
+  password: 5720.wearable
+  #文件传入目录
+  fixedPath: \\
 
 #审计固定ftp服务器
 fixedauditftp:
-  host: 192.168.3.35
-  port: 21
-  username: WUHU
-  password: 123456
-  fixedPath: \\AR\\Dxfs\\
+  host: 192.168.3.10
+  port: 20
+  username: wuhu
+  password: 5720.wearable
+  fixedPath: \\
 
 #涉密网FTP服务器(前置机)路径
-ftpUpperFolder: \\FTPUpper\\
+ftpUpperFolder: \\
 #工控网FTP服务器（后置机）路径
-ftpLowerFolder: \\FTPLower\\
+ftpLowerFolder: \\
 #部署本地上传暂存路径
 localUploadFolder: E:\chcFTPTest\FTPStart\
-#部署本地拉取暂存路径
-localDownloadFolder: E:\chcFTPTest\FTPDestination\
+#拉取文件本地存储目录
+localDownloadFolder: D:\FTPDestination\
 
 #该摆渡服务配置
 server:
   port: 8090
-
-#边缘文件服务器
-minio:
-  endpoint: http://192.168.3.184:9000
-  accesskey: minioadmin
-  secretkey: minioadmin
-  #  endpoint: http://172.80.21.60:9000
-  #  accesskey: wlzwuhu
-  #  secretkey: 123456789a
-  #检验记录图片
-  recordBucket: wuhu-record
-  #工艺附件图片
-  attachBucket: wuhu-attach
-  #图像识别结果
-  aiBucket: delection-result
-  #待识别文件存储路径
-  aiDetect: ai-detect

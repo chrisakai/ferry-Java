@@ -15,6 +15,8 @@ public class FTPLower {
 
     private  String password;
 
+    private String fixedPath;
+
     public  String getHost() {
         return host;
     }
@@ -47,4 +49,11 @@ public class FTPLower {
         this.password = password;
     }
 
+    public String getFixedPath() {
+        return fixedPath;
+    }
+
+    public void setFixedPath(String fixedPath) {
+        this.fixedPath = fixedPath;
+    }
 }
