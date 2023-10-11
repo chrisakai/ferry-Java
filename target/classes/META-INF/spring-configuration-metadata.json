@@ -1,6 +1,11 @@
 {
   "groups": [
     {
+      "name": "fixedauditftp",
+      "type": "com.wlz.entity.FixedAuditFTP",
+      "sourceType": "com.wlz.entity.FixedAuditFTP"
+    },
+    {
       "name": "fixedftp",
       "type": "com.wlz.entity.FixedFTP",
       "sourceType": "com.wlz.entity.FixedFTP"
@@ -17,6 +22,31 @@
     }
   ],
   "properties": [
+    {
+      "name": "fixedauditftp.fixed-path",
+      "type": "java.lang.String",
+      "sourceType": "com.wlz.entity.FixedAuditFTP"
+    },
+    {
+      "name": "fixedauditftp.host",
+      "type": "java.lang.String",
+      "sourceType": "com.wlz.entity.FixedAuditFTP"
+    },
+    {
+      "name": "fixedauditftp.password",
+      "type": "java.lang.String",
+      "sourceType": "com.wlz.entity.FixedAuditFTP"
+    },
+    {
+      "name": "fixedauditftp.port",
+      "type": "java.lang.Integer",
+      "sourceType": "com.wlz.entity.FixedAuditFTP"
+    },
+    {
+      "name": "fixedauditftp.username",
+      "type": "java.lang.String",
+      "sourceType": "com.wlz.entity.FixedAuditFTP"
+    },
     {
       "name": "fixedftp.fixed-path",
       "type": "java.lang.String",

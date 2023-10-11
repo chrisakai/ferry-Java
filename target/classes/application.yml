@@ -1,34 +1,43 @@
-#FTP前置/后置机
+#FTP前置机
 upper:
-  host: 192.168.3.184
+  host: 192.168.3.35
   port: 21
   username: WUHU
   password: 123456
 
-#后台服务部署机
+#FTP后置机
 lower:
-  host: 192.168.3.184
+  host: 192.168.3.35
   port: 21
   username: WUHU
   password: 123456
 
 #图纸固定ftp服务器
 fixedftp:
-  host: 192.168.3.184
+  host: 192.168.3.35
   port: 21
   username: WUHU
   password: 123456
   fixedPath: \\AR\\Dxfs\\
 
-#涉密网FTP服务器路径
+#审计固定ftp服务器
+fixedauditftp:
+  host: 192.168.3.35
+  port: 21
+  username: WUHU
+  password: 123456
+  fixedPath: \\AR\\Dxfs\\
+
+#涉密网FTP服务器(前置机)路径
 ftpUpperFolder: \\FTPUpper\\
+#工控网FTP服务器（后置机）路径
+ftpLowerFolder: \\FTPLower\\
 #部署本地上传暂存路径
 localUploadFolder: E:\chcFTPTest\FTPStart\
 #部署本地拉取暂存路径
 localDownloadFolder: E:\chcFTPTest\FTPDestination\
-#工控网FTP服务器路径
-ftpLowerFolder: \\FTPLower\\
 
+#该摆渡服务配置
 server:
   port: 8090
 
